@@ -619,19 +619,20 @@
 
             .calendar {
                 grid-template-columns: repeat(7, 1fr);
-                gap: 6px;
+                gap: 4px;
             }
 
             .calendar-day {
-                padding: 4px;
+                padding: 2px;
+                font-size: 0.75rem;
             }
 
             .day-number {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
             }
 
             .day-name {
-                font-size: 0.6rem;
+                font-size: 0.55rem;
             }
 
             .medicine-header {
@@ -641,6 +642,19 @@
 
             .medicine-time {
                 align-self: flex-start;
+            }
+
+            .medicine-actions {
+                flex-direction: column;
+            }
+
+            .btn-small {
+                width: 100%;
+            }
+
+            .modal-content {
+                padding: 25px;
+                margin: 10px;
             }
         }
 
@@ -719,8 +733,30 @@
                     <input type="text" id="medicineName" required placeholder="مثال: بنادول">
                 </div>
                 <div class="form-group">
-                    <label>الوقت *</label>
-                    <input type="time" id="medicineTime" required>
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="repeatEveryHours" onchange="toggleRepeatMode()" style="width: auto; margin: 0;">
+                        تكرار كل عدد ساعات
+                    </label>
+                </div>
+                <div id="singleTimeSection">
+                    <div class="form-group">
+                        <label>الوقت *</label>
+                        <input type="time" id="medicineTime">
+                    </div>
+                </div>
+                <div id="repeatTimeSection" style="display: none;">
+                    <div class="form-group">
+                        <label>الوقت الأول *</label>
+                        <input type="time" id="firstTime">
+                    </div>
+                    <div class="form-group">
+                        <label>تكرار كل (ساعة) *</label>
+                        <input type="number" id="hoursInterval" min="1" max="24" placeholder="مثال: 8">
+                    </div>
+                    <div class="form-group">
+                        <label>عدد المرات في اليوم *</label>
+                        <input type="number" id="timesPerDay" min="1" max="24" placeholder="مثال: 3">
+                    </div>
                 </div>
                 <div class="form-group">
                     <label>المدة (بالأيام) *</label>
@@ -821,25 +857,70 @@
             event.preventDefault();
 
             const name = document.getElementById('medicineName').value;
-            const time = document.getElementById('medicineTime').value;
             const duration = parseInt(document.getElementById('medicineDuration').value);
             const purpose = document.getElementById('medicinePurpose').value;
             const startDate = new Date(document.getElementById('medicineStartDate').value);
-
-            const medicineId = Date.now().toString();
-
-            const medicineData = {
-                id: medicineId,
-                name: name,
-                time: time,
-                duration: duration,
-                purpose: purpose,
-                startDate: formatDate(startDate),
-                createdAt: new Date().toISOString()
-            };
+            const repeatMode = document.getElementById('repeatEveryHours').checked;
 
             try {
-                await set(ref(database, 'medicines/' + medicineId), medicineData);
+                if (repeatMode) {
+                    // Repeat mode - create multiple medicines
+                    const firstTime = document.getElementById('firstTime').value;
+                    const hoursInterval = parseInt(document.getElementById('hoursInterval').value);
+                    const timesPerDay = parseInt(document.getElementById('timesPerDay').value);
+
+                    if (!firstTime || !hoursInterval || !timesPerDay) {
+                        alert('الرجاء ملء جميع حقول التكرار');
+                        return;
+                    }
+
+                    // Parse first time
+                    const [hours, minutes] = firstTime.split(':').map(Number);
+                    
+                    // Create medicine entries for each time
+                    for (let i = 0; i < timesPerDay; i++) {
+                        const medicineId = `${Date.now()}_${i}`;
+                        const totalHours = hours + (i * hoursInterval);
+                        const newHours = totalHours % 24;
+                        const timeStr = `${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+
+                        const medicineData = {
+                            id: medicineId,
+                            name: `${name} (${i + 1})`,
+                            time: timeStr,
+                            duration: duration,
+                            purpose: purpose,
+                            startDate: formatDate(startDate),
+                            createdAt: new Date().toISOString(),
+                            groupId: Date.now().toString() // To track related medicines
+                        };
+
+                        await set(ref(database, 'medicines/' + medicineId), medicineData);
+                        // Small delay to ensure unique timestamps
+                        await new Promise(resolve => setTimeout(resolve, 10));
+                    }
+                } else {
+                    // Single time mode
+                    const time = document.getElementById('medicineTime').value;
+                    if (!time) {
+                        alert('الرجاء اختيار الوقت');
+                        return;
+                    }
+
+                    const medicineId = Date.now().toString();
+                    const medicineData = {
+                        id: medicineId,
+                        name: name,
+                        time: time,
+                        duration: duration,
+                        purpose: purpose,
+                        startDate: formatDate(startDate),
+                        createdAt: new Date().toISOString()
+                    };
+
+                    await set(ref(database, 'medicines/' + medicineId), medicineData);
+                }
+
                 closeAddMedicineModal();
                 loadMedicinesForDate(currentDate);
                 generateCalendar();
@@ -858,6 +939,39 @@
                 });
             } catch (error) {
                 console.error('Error marking as taken:', error);
+            }
+        };
+
+        window.unmarkAsTaken = async function(medicineId, date) {
+            const dateStr = formatDate(date);
+            if (confirm('هل تريد إلغاء تسجيل أخذ هذا الدواء؟')) {
+                try {
+                    await remove(ref(database, `taken/${medicineId}/${dateStr}`));
+                } catch (error) {
+                    console.error('Error unmarking as taken:', error);
+                }
+            }
+        };
+
+        window.toggleRepeatMode = function() {
+            const checkbox = document.getElementById('repeatEveryHours');
+            const singleSection = document.getElementById('singleTimeSection');
+            const repeatSection = document.getElementById('repeatTimeSection');
+            
+            if (checkbox.checked) {
+                singleSection.style.display = 'none';
+                repeatSection.style.display = 'block';
+                document.getElementById('medicineTime').removeAttribute('required');
+                document.getElementById('firstTime').setAttribute('required', 'required');
+                document.getElementById('hoursInterval').setAttribute('required', 'required');
+                document.getElementById('timesPerDay').setAttribute('required', 'required');
+            } else {
+                singleSection.style.display = 'block';
+                repeatSection.style.display = 'none';
+                document.getElementById('medicineTime').setAttribute('required', 'required');
+                document.getElementById('firstTime').removeAttribute('required');
+                document.getElementById('hoursInterval').removeAttribute('required');
+                document.getElementById('timesPerDay').removeAttribute('required');
             }
         };
 
@@ -979,8 +1093,12 @@
             container.innerHTML = medicines.map(medicine => {
                 const takenClass = medicine.isTaken ? 'taken' : '';
                 const takenButton = medicine.isTaken 
-                    ? '<span style="color: var(--color-success); font-weight: 600;">✓ تم الأخذ</span>'
+                    ? `<button class="btn btn-small" style="background: var(--color-text-light); color: white;" onclick="unmarkAsTaken('${medicine.id}', new Date('${formatDate(date)}'))">↶ إلغاء</button>`
                     : `<button class="btn btn-small btn-success" onclick="markAsTaken('${medicine.id}', new Date('${formatDate(date)}'))">أخذت الدواء</button>`;
+
+                const takenLabel = medicine.isTaken 
+                    ? '<span style="color: var(--color-success); font-weight: 600; font-size: 0.95rem;">✓ تم الأخذ</span>'
+                    : '';
 
                 const noteButton = medicine.note 
                     ? `<button class="btn btn-small" style="background: var(--color-warm); color: white;" onclick="openNoteModal('${medicine.id}', new Date('${formatDate(date)}'), \`${medicine.note.replace(/`/g, '\\`')}\`)">📝 عرض الملاحظة</button>`
@@ -989,7 +1107,10 @@
                 return `
                     <div class="medicine-item ${takenClass}">
                         <div class="medicine-header">
-                            <div class="medicine-name">${medicine.name}</div>
+                            <div>
+                                <div class="medicine-name">${medicine.name}</div>
+                                ${takenLabel}
+                            </div>
                             <div class="medicine-time">${medicine.time}</div>
                         </div>
                         ${medicine.purpose ? `<div class="medicine-details">الغرض: ${medicine.purpose}</div>` : ''}
