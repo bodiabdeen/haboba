@@ -619,20 +619,35 @@
 
             .calendar {
                 grid-template-columns: repeat(7, 1fr);
-                gap: 4px;
+                gap: 3px;
+                font-size: 0.7rem;
             }
 
             .calendar-day {
-                padding: 2px;
-                font-size: 0.75rem;
+                padding: 3px 1px;
+                min-height: 45px;
+                border-width: 1px;
             }
 
             .day-number {
-                font-size: 0.85rem;
+                font-size: 0.8rem;
+                font-weight: 600;
             }
 
             .day-name {
-                font-size: 0.55rem;
+                display: none; /* Hide day names on mobile to save space */
+            }
+
+            .calendar > div:nth-child(-n+7) {
+                /* Day name headers */
+                font-size: 0.65rem;
+                padding: 5px 2px;
+                min-height: auto;
+            }
+
+            .calendar-header-day {
+                font-size: 0.7rem !important;
+                padding: 5px 2px !important;
             }
 
             .medicine-header {
@@ -642,6 +657,8 @@
 
             .medicine-time {
                 align-self: flex-start;
+                font-size: 0.95rem;
+                padding: 4px 10px;
             }
 
             .medicine-actions {
@@ -655,6 +672,10 @@
             .modal-content {
                 padding: 25px;
                 margin: 10px;
+            }
+
+            .expandable-content {
+                padding: 15px 10px;
             }
         }
 
@@ -752,10 +773,7 @@
                     <div class="form-group">
                         <label>تكرار كل (ساعة) *</label>
                         <input type="number" id="hoursInterval" min="1" max="24" placeholder="مثال: 8">
-                    </div>
-                    <div class="form-group">
-                        <label>عدد المرات في اليوم *</label>
-                        <input type="number" id="timesPerDay" min="1" max="24" placeholder="مثال: 3">
+                        <small style="color: var(--color-text-light); font-size: 0.85rem; display: block; margin-top: 5px;">سيتم حساب عدد الجرعات تلقائياً (24 ساعة ÷ عدد الساعات)</small>
                     </div>
                 </div>
                 <div class="form-group">
@@ -828,6 +846,14 @@
             return date.toLocaleDateString('ar-SA', options);
         }
 
+        function formatTime12Hour(time24) {
+            // Convert 24-hour time (HH:MM) to 12-hour format with Arabic AM/PM
+            const [hours, minutes] = time24.split(':').map(Number);
+            const period = hours >= 12 ? 'م' : 'ص'; // م = PM (مساءً), ص = AM (صباحاً)
+            const hours12 = hours % 12 || 12; // Convert 0 to 12
+            return `${hours12}:${String(minutes).padStart(2, '0')} ${period}`;
+        }
+
         function updateDateDisplay() {
             document.getElementById('currentDate').textContent = formatDateArabic(currentDate);
             loadMedicinesForDate(currentDate);
@@ -867,12 +893,14 @@
                     // Repeat mode - create multiple medicines
                     const firstTime = document.getElementById('firstTime').value;
                     const hoursInterval = parseInt(document.getElementById('hoursInterval').value);
-                    const timesPerDay = parseInt(document.getElementById('timesPerDay').value);
 
-                    if (!firstTime || !hoursInterval || !timesPerDay) {
+                    if (!firstTime || !hoursInterval) {
                         alert('الرجاء ملء جميع حقول التكرار');
                         return;
                     }
+
+                    // Calculate times per day automatically
+                    const timesPerDay = Math.floor(24 / hoursInterval);
 
                     // Parse first time
                     const [hours, minutes] = firstTime.split(':').map(Number);
@@ -964,14 +992,12 @@
                 document.getElementById('medicineTime').removeAttribute('required');
                 document.getElementById('firstTime').setAttribute('required', 'required');
                 document.getElementById('hoursInterval').setAttribute('required', 'required');
-                document.getElementById('timesPerDay').setAttribute('required', 'required');
             } else {
                 singleSection.style.display = 'block';
                 repeatSection.style.display = 'none';
                 document.getElementById('medicineTime').setAttribute('required', 'required');
                 document.getElementById('firstTime').removeAttribute('required');
                 document.getElementById('hoursInterval').removeAttribute('required');
-                document.getElementById('timesPerDay').removeAttribute('required');
             }
         };
 
@@ -1111,7 +1137,7 @@
                                 <div class="medicine-name">${medicine.name}</div>
                                 ${takenLabel}
                             </div>
-                            <div class="medicine-time">${medicine.time}</div>
+                            <div class="medicine-time">${formatTime12Hour(medicine.time)}</div>
                         </div>
                         ${medicine.purpose ? `<div class="medicine-details">الغرض: ${medicine.purpose}</div>` : ''}
                         ${medicine.note ? `<div class="note-section"><strong>ملاحظة:</strong> ${medicine.note}</div>` : ''}
@@ -1146,7 +1172,7 @@
 
             // Add day names
             dayNames.forEach(name => {
-                html += `<div style="text-align: center; font-weight: 700; color: var(--color-primary); padding: 10px;">${name}</div>`;
+                html += `<div class="calendar-header-day" style="text-align: center; font-weight: 700; color: var(--color-primary); padding: 10px; font-size: 0.9rem;">${name}</div>`;
             });
 
             // Add empty cells for days before month starts
