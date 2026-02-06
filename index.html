@@ -505,8 +505,20 @@
         .calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
-            margin-top: 20px;
+            gap: 2px;
+            margin-top: 15px;
+            background: #e8ecef;
+            padding: 2px;
+            border-radius: 12px;
+        }
+
+        .calendar-header-day {
+            text-align: center;
+            font-weight: 700;
+            color: var(--color-primary);
+            padding: 6px 2px;
+            font-size: 0.7rem;
+            background: var(--color-surface);
         }
 
         .calendar-day {
@@ -514,48 +526,71 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: var(--color-bg);
-            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            background: var(--color-surface);
+            border: none;
             font-weight: 600;
             position: relative;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: var(--color-text);
         }
 
         .calendar-day:hover {
             background: var(--color-accent);
             color: white;
-            transform: scale(1.05);
+            z-index: 1;
         }
 
         .calendar-day.today {
             background: var(--color-primary);
             color: white;
-            box-shadow: 0 2px 8px rgba(45, 90, 107, 0.3);
+            font-weight: 700;
         }
 
-        .calendar-day.has-medicines::after {
-            content: '';
+        .calendar-day.has-medicines::before {
+            content: '●';
             position: absolute;
-            bottom: 4px;
-            width: 4px;
-            height: 4px;
-            background: var(--color-warm);
-            border-radius: 50%;
+            top: 2px;
+            right: 2px;
+            font-size: 0.4rem;
+            color: var(--color-warm);
         }
 
-        .calendar-day.today.has-medicines::after {
-            background: white;
+        .calendar-day.today.has-medicines::before {
+            color: white;
         }
 
-        .calendar-header-day {
-            text-align: center;
+        .calendar-month-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .calendar-month-name {
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--color-primary);
-            padding: 8px 4px;
-            font-size: 0.75rem;
+            text-align: center;
+            flex: 1;
+        }
+
+        .calendar-nav-btn {
+            padding: 8px 12px;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .calendar-nav-btn:hover {
+            background: var(--color-secondary);
         }
 
         @media (max-width: 768px) {
@@ -597,23 +632,32 @@
             }
 
             .calendar {
-                gap: 3px;
+                gap: 1px;
+                padding: 1px;
             }
 
             .calendar-day {
-                font-size: 0.8rem;
-                border-radius: 6px;
+                font-size: 0.75rem;
             }
 
             .calendar-header-day {
-                font-size: 0.7rem;
-                padding: 6px 2px;
+                font-size: 0.65rem;
+                padding: 4px 1px;
             }
 
-            .calendar-day.has-medicines::after {
-                width: 3px;
-                height: 3px;
-                bottom: 3px;
+            .calendar-day.has-medicines::before {
+                font-size: 0.35rem;
+                top: 1px;
+                right: 1px;
+            }
+
+            .calendar-month-name {
+                font-size: 1rem;
+            }
+
+            .calendar-nav-btn {
+                padding: 6px 10px;
+                font-size: 0.85rem;
             }
         }
 
@@ -731,6 +775,11 @@
                 <span class="arrow">▼</span>
             </div>
             <div class="expandable-content">
+                <div class="calendar-month-nav">
+                    <button class="calendar-nav-btn" onclick="previousMonth()">◄</button>
+                    <div class="calendar-month-name" id="calendarMonthName"></div>
+                    <button class="calendar-nav-btn" onclick="nextMonth()">►</button>
+                </div>
                 <div class="calendar" id="calendar"></div>
             </div>
         </div>
@@ -1345,17 +1394,34 @@
             element.classList.toggle('active');
         };
 
+        let calendarDate = new Date();
+
+        window.previousMonth = function() {
+            calendarDate.setMonth(calendarDate.getMonth() - 1);
+            generateCalendar();
+        };
+
+        window.nextMonth = function() {
+            calendarDate.setMonth(calendarDate.getMonth() + 1);
+            generateCalendar();
+        };
+
         async function generateCalendar() {
             const calendar = document.getElementById('calendar');
-            const year = currentDate.getFullYear();
-            const month = currentDate.getMonth();
+            const monthName = document.getElementById('calendarMonthName');
+            const year = calendarDate.getFullYear();
+            const month = calendarDate.getMonth();
 
             const firstDay = new Date(year, month, 1);
             const lastDay = new Date(year, month + 1, 0);
             const daysInMonth = lastDay.getDate();
             const startDay = firstDay.getDay();
 
-            const dayNames = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+            // Update month name
+            const monthNames = ['يناير', 'فبراير', 'مارس', 'إبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+            monthName.textContent = `${monthNames[month]} ${year}`;
+
+            const dayNames = ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'];
 
             let html = '';
 
@@ -1399,7 +1465,7 @@
 
                 html += `
                     <div class="calendar-day ${todayClass} ${hasMedicinesClass}" onclick="selectDate(${year}, ${month}, ${day})">
-                        <div class="day-number">${day}</div>
+                        ${day}
                     </div>
                 `;
             }
@@ -1409,6 +1475,7 @@
 
         window.selectDate = function(year, month, day) {
             currentDate = new Date(year, month, day);
+            calendarDate = new Date(year, month, day);
             updateDateDisplay();
             document.getElementById('calendarSection').classList.remove('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
