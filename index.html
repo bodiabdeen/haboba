@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2d5a6b">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="متتبع الأدوية">
     <title>متتبع الأدوية الخاص بحبوبة</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💊</text></svg>">
+    <link rel="manifest" href="data:application/json,{%22name%22:%22متتبع%20الأدوية%22,%22short_name%22:%22أدويتي%22,%22start_url%22:%22.%22,%22display%22:%22standalone%22,%22background_color%22:%22%23f8f9fb%22,%22theme_color%22:%22%232d5a6b%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><text y=%27.9em%27 font-size=%2790%27>💊</text></svg>%22,%22sizes%22:%22512x512%22,%22type%22:%22image/svg+xml%22}]}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
@@ -38,6 +45,7 @@
             color: var(--color-text);
             min-height: 100vh;
             padding: 20px;
+            padding-bottom: 100px;
             position: relative;
             overflow-x: hidden;
         }
@@ -218,88 +226,46 @@
             box-shadow: 0 6px 16px rgba(126, 176, 155, 0.4);
         }
 
-        .btn-nav {
-            background: white;
-            color: var(--color-primary);
-            border: 2px solid var(--color-primary);
-            padding: 10px 20px;
-            font-size: 1.2rem;
-            min-width: 50px;
-        }
-
-        .btn-nav:hover {
-            background: var(--color-primary);
+        .btn-success {
+            background: var(--color-success);
             color: white;
-            transform: scale(1.05);
         }
 
-        .form-group {
-            margin-bottom: 20px;
+        .btn-danger {
+            background: var(--color-danger);
+            color: white;
         }
 
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--color-primary);
-            font-size: 1rem;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e0e6ed;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-family: 'Cairo', sans-serif;
-            transition: all 0.3s ease;
-            background: #f8f9fb;
-        }
-
-        input:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: var(--color-accent);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(126, 176, 155, 0.1);
-        }
-
-        .medicine-list {
-            display: grid;
-            gap: 15px;
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9rem;
         }
 
         .medicine-item {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fb 100%);
+            border: 2px solid #e8ecef;
+            border-radius: 16px;
             padding: 20px;
-            border-radius: 15px;
-            border: 2px solid transparent;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fb 100%);
             transition: all 0.3s ease;
             position: relative;
-            cursor: pointer;
             overflow: hidden;
         }
 
-        .medicine-item::after {
+        .medicine-item::before {
             content: '';
             position: absolute;
-            bottom: 0;
-            right: 0;
+            top: 0;
             left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--color-accent), var(--color-secondary));
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform 0.3s ease;
+            width: 6px;
+            height: 100%;
+            background: var(--color-accent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
-        .medicine-item:hover {
-            border-color: var(--color-accent);
-            transform: translateX(-5px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .medicine-item:hover::after {
-            transform: scaleX(1);
+        .medicine-item:hover::before {
+            opacity: 1;
         }
 
         .medicine-item.taken {
@@ -307,9 +273,9 @@
             border-color: var(--color-success);
         }
 
-        .medicine-item.taken::after {
+        .medicine-item.taken::before {
             background: var(--color-success);
-            transform: scaleX(1);
+            opacity: 1;
         }
 
         .medicine-header {
@@ -317,14 +283,13 @@
             justify-content: space-between;
             align-items: flex-start;
             margin-bottom: 12px;
-            gap: 15px;
         }
 
         .medicine-name {
             font-size: 1.3rem;
             font-weight: 700;
             color: var(--color-primary);
-            font-family: 'Amiri', serif;
+            margin-bottom: 5px;
         }
 
         .medicine-time {
@@ -334,280 +299,29 @@
             background: rgba(92, 133, 153, 0.1);
             padding: 6px 14px;
             border-radius: 20px;
-            white-space: nowrap;
         }
 
         .medicine-details {
             color: var(--color-text-light);
+            margin-bottom: 12px;
             font-size: 0.95rem;
-            margin-bottom: 10px;
-            line-height: 1.6;
+        }
+
+        .note-section {
+            background: rgba(244, 162, 97, 0.1);
+            border-right: 4px solid var(--color-warm);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+            font-size: 0.95rem;
+            color: var(--color-text);
         }
 
         .medicine-actions {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-        }
-
-        .btn-small {
-            padding: 8px 16px;
-            font-size: 0.9rem;
-            border-radius: 10px;
-        }
-
-        .btn-success {
-            background: var(--color-success);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: #40916c;
-            transform: scale(1.05);
-        }
-
-        .btn-danger {
-            background: var(--color-danger);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background: #d45b3f;
-            transform: scale(1.05);
-        }
-
-        .expandable {
-            margin-top: 20px;
-        }
-
-        .expandable-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            padding: 15px;
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-            color: white;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            user-select: none;
-        }
-
-        .expandable-header:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-
-        .expandable-header h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .expandable-icon {
-            font-size: 1.5rem;
-            transition: transform 0.3s ease;
-        }
-
-        .expandable.active .expandable-icon {
-            transform: rotate(180deg);
-        }
-
-        .expandable-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease, padding 0.4s ease;
-            padding: 0 15px;
-        }
-
-        .expandable.active .expandable-content {
-            max-height: 2000px;
-            padding: 20px 15px;
-        }
-
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .calendar-day {
-            aspect-ratio: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            border-radius: 12px;
-            border: 2px solid #e0e6ed;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            padding: 8px;
-            position: relative;
-        }
-
-        .calendar-day:hover {
-            border-color: var(--color-accent);
-            transform: scale(1.05);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .calendar-day.today {
-            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
-            color: white;
-            font-weight: 700;
-            border-color: var(--color-accent);
-        }
-
-        .calendar-day.has-medicines::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 6px;
-            height: 6px;
-            background: var(--color-warm);
-            border-radius: 50%;
-        }
-
-        .calendar-day.today.has-medicines::after {
-            background: white;
-        }
-
-        .day-number {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .day-name {
-            font-size: 0.7rem;
-            margin-top: 2px;
-            opacity: 0.7;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            padding: 20px;
-            overflow-y: auto;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal.active {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 35px;
-            max-width: 500px;
-            width: 100%;
-            box-shadow: var(--shadow-lg);
-            animation: slideUp 0.4s ease;
-            position: relative;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .modal-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--color-primary);
-            font-family: 'Amiri', serif;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 2rem;
-            color: var(--color-text-light);
-            cursor: pointer;
-            padding: 0;
-            width: 35px;
-            height: 35px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .close-modal:hover {
-            background: #f0f0f0;
-            color: var(--color-danger);
-            transform: rotate(90deg);
-        }
-
-        .back-button {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: white;
-            border: 2px solid var(--color-primary);
-            color: var(--color-primary);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.5rem;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-md);
-            z-index: 1001;
-        }
-
-        .back-button:hover {
-            background: var(--color-primary);
-            color: white;
-            transform: scale(1.1);
-        }
-
-        .note-section {
             margin-top: 15px;
-            padding: 15px;
-            background: #f8f9fb;
-            border-radius: 12px;
-            border-right: 4px solid var(--color-accent);
-        }
-
-        .note-section textarea {
-            min-height: 80px;
-            resize: vertical;
         }
 
         .empty-state {
@@ -619,12 +333,220 @@
         .empty-state-icon {
             font-size: 4rem;
             margin-bottom: 20px;
-            opacity: 0.5;
+            opacity: 0.6;
         }
 
         .empty-state-text {
             font-size: 1.2rem;
-            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        .modal-content {
+            background: var(--color-surface);
+            border-radius: 24px;
+            padding: 35px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            animation: modalSlideIn 0.4s ease-out;
+            margin: auto;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal h2 {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(45, 90, 107, 0.1);
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-primary);
+        }
+
+        .close-btn:hover {
+            background: var(--color-primary);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--color-text);
+            font-size: 0.95rem;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e8ecef;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: 'Cairo', sans-serif;
+            transition: all 0.3s ease;
+            background: var(--color-bg);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 4px rgba(126, 176, 155, 0.1);
+            background: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .expandable {
+            margin-bottom: 20px;
+            border: 2px solid #e8ecef;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .expandable-header {
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-secondary) 100%);
+            color: white;
+            padding: 18px 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .expandable-header:hover {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+        }
+
+        .expandable-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: white;
+        }
+
+        .expandable.active .expandable-content {
+            max-height: 3000px;
+            padding: 25px;
+        }
+
+        .expandable.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        .arrow {
+            transition: transform 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--color-bg);
+            border: 2px solid transparent;
+            font-weight: 600;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: var(--color-accent);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .calendar-day.today {
+            background: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(45, 90, 107, 0.3);
+        }
+
+        .calendar-day.has-medicines::after {
+            content: '';
+            position: absolute;
+            bottom: 6px;
+            width: 6px;
+            height: 6px;
+            background: var(--color-warm);
+            border-radius: 50%;
+        }
+
+        .calendar-day.today.has-medicines::after {
+            background: white;
         }
 
         @media (max-width: 768px) {
@@ -632,61 +554,18 @@
                 font-size: 2.5rem;
             }
 
-            .card {
-                padding: 20px;
-            }
-
             .date-navigation {
                 flex-direction: column;
                 gap: 10px;
             }
 
-            .btn-nav {
-                width: 100%;
-            }
-
-            .calendar {
-                grid-template-columns: repeat(7, 1fr);
-                gap: 3px;
-                font-size: 0.7rem;
-            }
-
-            .calendar-day {
-                padding: 3px 1px;
-                min-height: 45px;
-                border-width: 1px;
-            }
-
-            .day-number {
-                font-size: 0.8rem;
-                font-weight: 600;
-            }
-
-            .day-name {
-                display: none; /* Hide day names on mobile to save space */
-            }
-
-            .calendar > div:nth-child(-n+7) {
-                /* Day name headers */
-                font-size: 0.65rem;
-                padding: 5px 2px;
-                min-height: auto;
-            }
-
-            .calendar-header-day {
-                font-size: 0.7rem !important;
-                padding: 5px 2px !important;
+            .date-display {
+                font-size: 1.2rem;
             }
 
             .medicine-header {
                 flex-direction: column;
-                gap: 8px;
-            }
-
-            .medicine-time {
-                align-self: flex-start;
-                font-size: 0.95rem;
-                padding: 4px 10px;
+                gap: 10px;
             }
 
             .medicine-actions {
@@ -699,230 +578,173 @@
 
             .modal-content {
                 padding: 25px;
-                margin: 10px;
+                max-height: 85vh;
             }
 
-            .expandable-content {
-                padding: 15px 10px;
+            .modal.active {
+                padding: 10px;
+                padding-top: 20px;
+                padding-bottom: 20px;
             }
         }
 
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--color-text-light);
+        /* Add to Home Screen Button */
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 999;
+            max-width: 500px;
+            width: calc(100% - 40px);
         }
 
-        .loading::after {
-            content: '...';
-            animation: dots 1.5s infinite;
+        .install-btn {
+            width: 100%;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(45, 90, 107, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: 'Cairo', sans-serif;
         }
 
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(45, 90, 107, 0.5);
+        }
+
+        .install-btn:active {
+            transform: translateY(0);
+        }
+
+        .install-btn.hidden {
+            display: none;
+        }
+
+        .install-instructions {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            margin-top: 10px;
+            display: none;
+        }
+
+        .install-instructions.active {
+            display: block;
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        .install-instructions h3 {
+            color: var(--color-primary);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .install-instructions ol {
+            margin-right: 20px;
+            color: var(--color-text);
+            line-height: 1.8;
+        }
+
+        .install-instructions li {
+            margin-bottom: 10px;
+        }
+
+        .close-instructions {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background: var(--color-text-light);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>💊 متتبع الأدوية الخاص بحبوبة</h1>
-            <p class="subtitle">بسم الله الشافي المعافي</p>
+            <h1>💊 متتبع الأدوية</h1>
+            <p class="subtitle">لحبوبة الغالية - نظام متابعة الأدوية اليومية</p>
         </header>
 
-        <!-- Date Navigation -->
         <div class="card">
             <div class="date-navigation">
-                <button class="btn btn-nav" onclick="changeDay(-1)">◄</button>
-                <div class="date-display" id="currentDate"></div>
-                <button class="btn btn-nav" onclick="changeDay(1)">►</button>
+                <button class="btn btn-secondary" onclick="previousDay()">← السابق</button>
+                <div class="date-display" id="dateDisplay"></div>
+                <button class="btn btn-secondary" onclick="nextDay()">التالي →</button>
             </div>
-            <button class="btn btn-secondary" style="width: 100%; margin-top: 15px;" onclick="goToToday()">العودة لليوم</button>
+            <button class="btn btn-primary" style="width: 100%; margin-bottom: 15px;" onclick="goToToday()">اليوم</button>
+            <button class="btn btn-primary" style="width: 100%;" onclick="openAddMedicineModal()">➕ إضافة دواء جديد</button>
         </div>
 
-        <!-- Add Medicine Button -->
         <div class="card">
-            <button class="btn btn-primary" style="width: 100%;" onclick="openAddMedicineModal()">
-                ➕ إضافة دواء جديد
-            </button>
+            <h2 style="font-family: 'Amiri', serif; font-size: 1.8rem; color: var(--color-primary); margin-bottom: 20px; text-align: center;">📋 أدوية اليوم</h2>
+            <div id="medicinesList"></div>
         </div>
 
-        <!-- Medicines List -->
-        <div class="card">
-            <h2 style="margin-bottom: 20px; color: var(--color-primary); font-family: 'Amiri', serif;">أدوية اليوم</h2>
-            <div id="medicinesList" class="medicine-list">
-                <div class="loading">جاري التحميل</div>
-            </div>
-        </div>
-
-        <!-- Calendar View -->
-        <div class="card expandable" id="calendarSection">
+        <div class="expandable" id="calendarSection">
             <div class="expandable-header" onclick="toggleExpandable('calendarSection')">
-                <h3>📅 عرض التقويم</h3>
-                <span class="expandable-icon">▼</span>
+                <span>📅 التقويم الشهري</span>
+                <span class="arrow">▼</span>
             </div>
             <div class="expandable-content">
-                <div id="calendar" class="calendar"></div>
+                <div class="calendar" id="calendar"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- Add to Home Screen Prompt -->
+    <div class="install-prompt">
+        <button id="installBtn" class="install-btn hidden">
+            <span>📱</span>
+            <span>أضف التطبيق للشاشة الرئيسية</span>
+        </button>
+        <div id="installInstructions" class="install-instructions">
+            <h3>كيفية إضافة التطبيق للشاشة الرئيسية:</h3>
+            <div id="instructionsContent"></div>
+            <button class="close-instructions" onclick="closeInstructions()">فهمت، شكراً</button>
         </div>
     </div>
 
     <!-- Add Medicine Modal -->
     <div class="modal" id="addMedicineModal">
-        <button class="back-button" onclick="closeAddMedicineModal()">◄</button>
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">إضافة دواء جديد</h2>
-                <button class="close-modal" onclick="closeAddMedicineModal()">×</button>
-            </div>
-            <form id="addMedicineForm" onsubmit="addMedicine(event)">
+            <button class="close-btn" onclick="closeAddMedicineModal()">✕</button>
+            <h2>إضافة دواء جديد</h2>
+            <form id="addMedicineForm">
                 <div class="form-group">
-                    <label>اسم الدواء *</label>
-                    <input type="text" id="medicineName" required placeholder="مثال: بنادول">
+                    <label for="medicineName">اسم الدواء *</label>
+                    <input type="text" id="medicineName" required placeholder="مثال: أسبرين">
                 </div>
                 <div class="form-group">
-                    <label style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" id="repeatEveryHours" onchange="toggleRepeatMode()" style="width: auto; margin: 0;">
-                        تكرار كل عدد ساعات
-                    </label>
-                </div>
-                <div id="singleTimeSection">
-                    <div class="form-group">
-                        <label>الوقت *</label>
-                        <select id="medicineTime" style="cursor: pointer;">
-                            <option value="">اختر الوقت</option>
-                            <option value="00:00">12:00 ص</option>
-                            <option value="00:30">12:30 ص</option>
-                            <option value="01:00">1:00 ص</option>
-                            <option value="01:30">1:30 ص</option>
-                            <option value="02:00">2:00 ص</option>
-                            <option value="02:30">2:30 ص</option>
-                            <option value="03:00">3:00 ص</option>
-                            <option value="03:30">3:30 ص</option>
-                            <option value="04:00">4:00 ص</option>
-                            <option value="04:30">4:30 ص</option>
-                            <option value="05:00">5:00 ص</option>
-                            <option value="05:30">5:30 ص</option>
-                            <option value="06:00">6:00 ص</option>
-                            <option value="06:30">6:30 ص</option>
-                            <option value="07:00">7:00 ص</option>
-                            <option value="07:30">7:30 ص</option>
-                            <option value="08:00">8:00 ص</option>
-                            <option value="08:30">8:30 ص</option>
-                            <option value="09:00">9:00 ص</option>
-                            <option value="09:30">9:30 ص</option>
-                            <option value="10:00">10:00 ص</option>
-                            <option value="10:30">10:30 ص</option>
-                            <option value="11:00">11:00 ص</option>
-                            <option value="11:30">11:30 ص</option>
-                            <option value="12:00">12:00 م</option>
-                            <option value="12:30">12:30 م</option>
-                            <option value="13:00">1:00 م</option>
-                            <option value="13:30">1:30 م</option>
-                            <option value="14:00">2:00 م</option>
-                            <option value="14:30">2:30 م</option>
-                            <option value="15:00">3:00 م</option>
-                            <option value="15:30">3:30 م</option>
-                            <option value="16:00">4:00 م</option>
-                            <option value="16:30">4:30 م</option>
-                            <option value="17:00">5:00 م</option>
-                            <option value="17:30">5:30 م</option>
-                            <option value="18:00">6:00 م</option>
-                            <option value="18:30">6:30 م</option>
-                            <option value="19:00">7:00 م</option>
-                            <option value="19:30">7:30 م</option>
-                            <option value="20:00">8:00 م</option>
-                            <option value="20:30">8:30 م</option>
-                            <option value="21:00">9:00 م</option>
-                            <option value="21:30">9:30 م</option>
-                            <option value="22:00">10:00 م</option>
-                            <option value="22:30">10:30 م</option>
-                            <option value="23:00">11:00 م</option>
-                            <option value="23:30">11:30 م</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="repeatTimeSection" style="display: none;">
-                    <div class="form-group">
-                        <label>الوقت الأول *</label>
-                        <select id="firstTime" style="cursor: pointer;">
-                            <option value="">اختر الوقت</option>
-                            <option value="00:00">12:00 ص</option>
-                            <option value="00:30">12:30 ص</option>
-                            <option value="01:00">1:00 ص</option>
-                            <option value="01:30">1:30 ص</option>
-                            <option value="02:00">2:00 ص</option>
-                            <option value="02:30">2:30 ص</option>
-                            <option value="03:00">3:00 ص</option>
-                            <option value="03:30">3:30 ص</option>
-                            <option value="04:00">4:00 ص</option>
-                            <option value="04:30">4:30 ص</option>
-                            <option value="05:00">5:00 ص</option>
-                            <option value="05:30">5:30 ص</option>
-                            <option value="06:00">6:00 ص</option>
-                            <option value="06:30">6:30 ص</option>
-                            <option value="07:00">7:00 ص</option>
-                            <option value="07:30">7:30 ص</option>
-                            <option value="08:00">8:00 ص</option>
-                            <option value="08:30">8:30 ص</option>
-                            <option value="09:00">9:00 ص</option>
-                            <option value="09:30">9:30 ص</option>
-                            <option value="10:00">10:00 ص</option>
-                            <option value="10:30">10:30 ص</option>
-                            <option value="11:00">11:00 ص</option>
-                            <option value="11:30">11:30 ص</option>
-                            <option value="12:00">12:00 م</option>
-                            <option value="12:30">12:30 م</option>
-                            <option value="13:00">1:00 م</option>
-                            <option value="13:30">1:30 م</option>
-                            <option value="14:00">2:00 م</option>
-                            <option value="14:30">2:30 م</option>
-                            <option value="15:00">3:00 م</option>
-                            <option value="15:30">3:30 م</option>
-                            <option value="16:00">4:00 م</option>
-                            <option value="16:30">4:30 م</option>
-                            <option value="17:00">5:00 م</option>
-                            <option value="17:30">5:30 م</option>
-                            <option value="18:00">6:00 م</option>
-                            <option value="18:30">6:30 م</option>
-                            <option value="19:00">7:00 م</option>
-                            <option value="19:30">7:30 م</option>
-                            <option value="20:00">8:00 م</option>
-                            <option value="20:30">8:30 م</option>
-                            <option value="21:00">9:00 م</option>
-                            <option value="21:30">9:30 م</option>
-                            <option value="22:00">10:00 م</option>
-                            <option value="22:30">10:30 م</option>
-                            <option value="23:00">11:00 م</option>
-                            <option value="23:30">11:30 م</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>تكرار كل (ساعة) *</label>
-                        <input type="number" id="hoursInterval" min="1" max="24" placeholder="مثال: 8">
-                        <small style="color: var(--color-text-light); font-size: 0.85rem; display: block; margin-top: 5px;">سيتم حساب عدد الجرعات تلقائياً (24 ساعة ÷ عدد الساعات)</small>
-                    </div>
+                    <label for="medicineTime">الوقت *</label>
+                    <input type="time" id="medicineTime" required>
                 </div>
                 <div class="form-group">
-                    <label>المدة *</label>
-                    <select id="durationMode" onchange="toggleDurationMode()" style="cursor: pointer;">
-                        <option value="days">عدد أيام محدد</option>
-                        <option value="forever">يومياً</option>
-                    </select>
-                </div>
-                <div class="form-group" id="durationDaysSection">
-                    <label>عدد الأيام *</label>
-                    <input type="number" id="medicineDuration" required min="1" placeholder="مثال: 7">
+                    <label for="medicinePurpose">الغرض من الدواء</label>
+                    <input type="text" id="medicinePurpose" placeholder="مثال: مسكن للألم">
                 </div>
                 <div class="form-group">
-                    <label>الغرض من الدواء (اختياري)</label>
-                    <textarea id="medicinePurpose" rows="3" placeholder="مثال: لتخفيف الصداع"></textarea>
+                    <label for="startDate">تاريخ البداية *</label>
+                    <input type="date" id="startDate" required>
                 </div>
                 <div class="form-group">
-                    <label>تاريخ البدء *</label>
-                    <input type="date" id="medicineStartDate" required>
+                    <label for="duration">المدة (بالأيام) *</label>
+                    <input type="number" id="duration" required min="1" placeholder="مثال: 7">
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">حفظ الدواء</button>
             </form>
@@ -931,261 +753,219 @@
 
     <!-- Note Modal -->
     <div class="modal" id="noteModal">
-        <button class="back-button" onclick="closeNoteModal()">◄</button>
         <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">إضافة ملاحظة</h2>
-                <button class="close-modal" onclick="closeNoteModal()">×</button>
-            </div>
-            <div class="form-group">
-                <label>الملاحظة</label>
-                <textarea id="noteText" rows="4" placeholder="أضف ملاحظة هنا..."></textarea>
-            </div>
-            <button class="btn btn-primary" style="width: 100%;" onclick="saveNote()">حفظ الملاحظة</button>
+            <button class="close-btn" onclick="closeNoteModal()">✕</button>
+            <h2>إضافة ملاحظة</h2>
+            <form id="noteForm">
+                <div class="form-group">
+                    <label for="noteText">الملاحظة</label>
+                    <textarea id="noteText" placeholder="أضف ملاحظتك هنا..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">حفظ الملاحظة</button>
+            </form>
         </div>
     </div>
 
-    <!-- Firebase -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, set, get, remove, update, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getDatabase, ref, set, get, remove, onValue, push } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
         const firebaseConfig = {
-            apiKey: "AIzaSyA3lDgN6xpk-wgSyg2iAn9THuPfdtizVeo",
-            authDomain: "medicine-c7e3a.firebaseapp.com",
-            databaseURL: "https://medicine-c7e3a-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "medicine-c7e3a",
-            storageBucket: "medicine-c7e3a.firebasestorage.app",
-            messagingSenderId: "658493644678",
-            appId: "1:658493644678:web:b576da63a09e1546699607"
+            apiKey: "AIzaSyD9kPC_nLlS_dW8BrSgIKKJcPKU_5u-ooE",
+            authDomain: "medicine-tracker-82f0e.firebaseapp.com",
+            databaseURL: "https://medicine-tracker-82f0e-default-rtdb.firebaseio.com",
+            projectId: "medicine-tracker-82f0e",
+            storageBucket: "medicine-tracker-82f0e.firebasestorage.app",
+            messagingSenderId: "655868046071",
+            appId: "1:655868046071:web:e5c6ec7cdaf2f14d1b2f04"
         };
 
         const app = initializeApp(firebaseConfig);
         const database = getDatabase(app);
 
         let currentDate = new Date();
-        let currentNoteData = null;
+        let deferredPrompt;
 
-        window.db = database;
-        window.dbRef = ref;
-        window.dbSet = set;
-        window.dbGet = get;
-        window.dbRemove = remove;
-        window.dbUpdate = update;
-        window.dbOnValue = onValue;
+        // Install prompt handling
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installBtn').classList.remove('hidden');
+        });
+
+        document.getElementById('installBtn').addEventListener('click', async () => {
+            const installBtn = document.getElementById('installBtn');
+            const instructions = document.getElementById('installInstructions');
+            
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installBtn.classList.add('hidden');
+                }
+                deferredPrompt = null;
+            } else {
+                // Show manual instructions
+                const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                const isAndroid = /Android/.test(navigator.userAgent);
+                
+                let instructionsHTML = '';
+                
+                if (isIOS) {
+                    instructionsHTML = `
+                        <ol>
+                            <li>اضغط على زر المشاركة <span style="font-size: 1.2rem;">⎋</span> في شريط الأدوات السفلي</li>
+                            <li>اختر "Add to Home Screen" أو "أضف إلى الشاشة الرئيسية"</li>
+                            <li>اضغط "Add" أو "إضافة"</li>
+                        </ol>
+                    `;
+                } else if (isAndroid) {
+                    instructionsHTML = `
+                        <ol>
+                            <li>اضغط على القائمة <span style="font-size: 1.2rem;">⋮</span> في أعلى المتصفح</li>
+                            <li>اختر "Add to Home screen" أو "إضافة إلى الشاشة الرئيسية"</li>
+                            <li>اضغط "Add" أو "إضافة"</li>
+                        </ol>
+                    `;
+                } else {
+                    instructionsHTML = `
+                        <ol>
+                            <li>افتح قائمة المتصفح</li>
+                            <li>ابحث عن خيار "إضافة إلى الشاشة الرئيسية"</li>
+                            <li>اتبع التعليمات لإضافة التطبيق</li>
+                        </ol>
+                    `;
+                }
+                
+                document.getElementById('instructionsContent').innerHTML = instructionsHTML;
+                instructions.classList.add('active');
+            }
+        });
+
+        window.closeInstructions = function() {
+            document.getElementById('installInstructions').classList.remove('active');
+        };
+
+        // Check if already installed
+        if (window.matchMedia('(display-mode: standalone)').matches) {
+            document.getElementById('installBtn').classList.add('hidden');
+        }
 
         function formatDate(date) {
-            return date.toISOString().split('T')[0];
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
 
         function formatDateArabic(date) {
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            return date.toLocaleDateString('ar-SA', options);
+            return date.toLocaleDateString('ar-EG', options);
         }
 
         function formatTime12Hour(time24) {
-            // Convert 24-hour time (HH:MM) to 12-hour format with Arabic AM/PM
-            const [hours, minutes] = time24.split(':').map(Number);
-            const period = hours >= 12 ? 'م' : 'ص'; // م = PM (مساءً), ص = AM (صباحاً)
-            const hours12 = hours % 12 || 12; // Convert 0 to 12
-            return `${hours12}:${String(minutes).padStart(2, '0')} ${period}`;
+            const [hours, minutes] = time24.split(':');
+            const hour = parseInt(hours);
+            const period = hour >= 12 ? 'م' : 'ص';
+            const hour12 = hour % 12 || 12;
+            return `${hour12}:${minutes} ${period}`;
         }
 
         function updateDateDisplay() {
-            document.getElementById('currentDate').textContent = formatDateArabic(currentDate);
+            document.getElementById('dateDisplay').textContent = formatDateArabic(currentDate);
             loadMedicinesForDate(currentDate);
         }
 
-        window.changeDay = function(days) {
-            currentDate.setDate(currentDate.getDate() + days);
+        window.previousDay = function() {
+            currentDate.setDate(currentDate.getDate() - 1);
             updateDateDisplay();
+            generateCalendar();
+        };
+
+        window.nextDay = function() {
+            currentDate.setDate(currentDate.getDate() + 1);
+            updateDateDisplay();
+            generateCalendar();
         };
 
         window.goToToday = function() {
             currentDate = new Date();
             updateDateDisplay();
+            generateCalendar();
         };
 
         window.openAddMedicineModal = function() {
+            document.getElementById('startDate').valueAsDate = new Date();
             document.getElementById('addMedicineModal').classList.add('active');
-            document.getElementById('medicineStartDate').valueAsDate = new Date();
+            document.body.style.overflow = 'hidden';
         };
 
         window.closeAddMedicineModal = function() {
             document.getElementById('addMedicineModal').classList.remove('active');
             document.getElementById('addMedicineForm').reset();
+            document.body.style.overflow = 'auto';
         };
 
-        window.addMedicine = async function(event) {
-            event.preventDefault();
+        document.getElementById('addMedicineForm').onsubmit = async function(e) {
+            e.preventDefault();
 
             const name = document.getElementById('medicineName').value;
-            const durationMode = document.getElementById('durationMode').value;
-            const duration = durationMode === 'forever' ? 36500 : parseInt(document.getElementById('medicineDuration').value); // 100 years for "forever"
+            const time = document.getElementById('medicineTime').value;
             const purpose = document.getElementById('medicinePurpose').value;
-            const startDate = new Date(document.getElementById('medicineStartDate').value);
-            const repeatMode = document.getElementById('repeatEveryHours').checked;
+            const startDate = document.getElementById('startDate').value;
+            const duration = parseInt(document.getElementById('duration').value);
 
-            try {
-                if (repeatMode) {
-                    // Repeat mode - create multiple medicines
-                    const firstTime = document.getElementById('firstTime').value;
-                    const hoursInterval = parseInt(document.getElementById('hoursInterval').value);
+            const medicineRef = push(ref(database, 'medicines'));
+            await set(medicineRef, {
+                id: medicineRef.key,
+                name: name,
+                time: time,
+                purpose: purpose,
+                startDate: startDate,
+                duration: duration
+            });
 
-                    if (!firstTime || !hoursInterval) {
-                        alert('الرجاء ملء جميع حقول التكرار');
-                        return;
-                    }
+            closeAddMedicineModal();
+        };
 
-                    // Calculate times per day automatically
-                    const timesPerDay = Math.floor(24 / hoursInterval);
-
-                    // Parse first time
-                    const [hours, minutes] = firstTime.split(':').map(Number);
-                    
-                    // Create medicine entries for each time
-                    for (let i = 0; i < timesPerDay; i++) {
-                        const medicineId = `${Date.now()}_${i}`;
-                        const totalHours = hours + (i * hoursInterval);
-                        const newHours = totalHours % 24;
-                        const timeStr = `${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
-
-                        const medicineData = {
-                            id: medicineId,
-                            name: `${name} (${i + 1})`,
-                            time: timeStr,
-                            duration: duration,
-                            isForever: durationMode === 'forever',
-                            purpose: purpose,
-                            startDate: formatDate(startDate),
-                            createdAt: new Date().toISOString(),
-                            groupId: Date.now().toString() // To track related medicines
-                        };
-
-                        await set(ref(database, 'medicines/' + medicineId), medicineData);
-                        // Small delay to ensure unique timestamps
-                        await new Promise(resolve => setTimeout(resolve, 10));
-                    }
-                } else {
-                    // Single time mode
-                    const time = document.getElementById('medicineTime').value;
-                    if (!time) {
-                        alert('الرجاء اختيار الوقت');
-                        return;
-                    }
-
-                    const medicineId = Date.now().toString();
-                    const medicineData = {
-                        id: medicineId,
-                        name: name,
-                        time: time,
-                        duration: duration,
-                        isForever: durationMode === 'forever',
-                        purpose: purpose,
-                        startDate: formatDate(startDate),
-                        createdAt: new Date().toISOString()
-                    };
-
-                    await set(ref(database, 'medicines/' + medicineId), medicineData);
-                }
-
-                closeAddMedicineModal();
-                loadMedicinesForDate(currentDate);
-                generateCalendar();
-            } catch (error) {
-                console.error('Error adding medicine:', error);
-                alert('حدث خطأ أثناء إضافة الدواء');
+        window.deleteMedicine = async function(medicineId) {
+            if (confirm('هل أنت متأكد من حذف هذا الدواء؟')) {
+                await remove(ref(database, `medicines/${medicineId}`));
+                await remove(ref(database, `taken/${medicineId}`));
+                await remove(ref(database, `notes/${medicineId}`));
             }
         };
 
         window.markAsTaken = async function(medicineId, date) {
             const dateStr = formatDate(date);
-            try {
-                await set(ref(database, `taken/${medicineId}/${dateStr}`), {
-                    taken: true,
-                    timestamp: new Date().toISOString()
-                });
-            } catch (error) {
-                console.error('Error marking as taken:', error);
-            }
+            await set(ref(database, `taken/${medicineId}/${dateStr}`), {
+                timestamp: new Date().toISOString()
+            });
         };
 
         window.unmarkAsTaken = async function(medicineId, date) {
             const dateStr = formatDate(date);
-            if (confirm('هل تريد إلغاء تسجيل أخذ هذا الدواء؟')) {
-                try {
-                    await remove(ref(database, `taken/${medicineId}/${dateStr}`));
-                } catch (error) {
-                    console.error('Error unmarking as taken:', error);
-                }
-            }
+            await remove(ref(database, `taken/${medicineId}/${dateStr}`));
         };
 
-        window.toggleRepeatMode = function() {
-            const checkbox = document.getElementById('repeatEveryHours');
-            const singleSection = document.getElementById('singleTimeSection');
-            const repeatSection = document.getElementById('repeatTimeSection');
-            
-            if (checkbox.checked) {
-                singleSection.style.display = 'none';
-                repeatSection.style.display = 'block';
-                document.getElementById('medicineTime').removeAttribute('required');
-                document.getElementById('firstTime').setAttribute('required', 'required');
-                document.getElementById('hoursInterval').setAttribute('required', 'required');
-            } else {
-                singleSection.style.display = 'block';
-                repeatSection.style.display = 'none';
-                document.getElementById('medicineTime').setAttribute('required', 'required');
-                document.getElementById('firstTime').removeAttribute('required');
-                document.getElementById('hoursInterval').removeAttribute('required');
-            }
-        };
+        let currentNoteData = null;
 
-        window.toggleDurationMode = function() {
-            const mode = document.getElementById('durationMode').value;
-            const daysSection = document.getElementById('durationDaysSection');
-            const durationInput = document.getElementById('medicineDuration');
-            
-            if (mode === 'forever') {
-                daysSection.style.display = 'none';
-                durationInput.removeAttribute('required');
-                durationInput.value = ''; // Clear the value
-            } else {
-                daysSection.style.display = 'block';
-                durationInput.setAttribute('required', 'required');
-            }
-        };
-
-        window.deleteMedicine = async function(medicineId) {
-            if (confirm('هل أنت متأكد من حذف هذا الدواء؟')) {
-                try {
-                    await remove(ref(database, 'medicines/' + medicineId));
-                    await remove(ref(database, 'taken/' + medicineId));
-                    await remove(ref(database, 'notes/' + medicineId));
-                    loadMedicinesForDate(currentDate);
-                    generateCalendar();
-                } catch (error) {
-                    console.error('Error deleting medicine:', error);
-                    alert('حدث خطأ أثناء حذف الدواء');
-                }
-            }
-        };
-
-        window.openNoteModal = function(medicineId, date, currentNote = '') {
+        window.openNoteModal = function(medicineId, date, existingNote = '') {
             currentNoteData = { medicineId, date };
-            document.getElementById('noteText').value = currentNote;
+            document.getElementById('noteText').value = existingNote;
             document.getElementById('noteModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         };
 
         window.closeNoteModal = function() {
             document.getElementById('noteModal').classList.remove('active');
-            document.getElementById('noteText').value = '';
+            document.getElementById('noteForm').reset();
             currentNoteData = null;
+            document.body.style.overflow = 'auto';
         };
 
-        window.saveNote = async function() {
-            if (!currentNoteData) return;
-
+        document.getElementById('noteForm').onsubmit = async function(e) {
+            e.preventDefault();
             const note = document.getElementById('noteText').value;
             const { medicineId, date } = currentNoteData;
             const dateStr = formatDate(date);
