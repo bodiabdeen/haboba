@@ -728,23 +728,149 @@
             <form id="addMedicineForm">
                 <div class="form-group">
                     <label for="medicineName">اسم الدواء *</label>
-                    <input type="text" id="medicineName" required placeholder="مثال: أسبرين">
+                    <input type="text" id="medicineName" required placeholder="مثال: بنادول">
                 </div>
                 <div class="form-group">
-                    <label for="medicineTime">الوقت *</label>
-                    <input type="time" id="medicineTime" required>
+                    <label style="display: flex; align-items: center; gap: 10px;">
+                        <input type="checkbox" id="repeatEveryHours" onchange="toggleRepeatMode()" style="width: auto; margin: 0;">
+                        تكرار كل عدد ساعات
+                    </label>
+                </div>
+                <div id="singleTimeSection">
+                    <div class="form-group">
+                        <label for="medicineTime">الوقت *</label>
+                        <select id="medicineTime" required style="cursor: pointer;">
+                            <option value="">اختر الوقت</option>
+                            <option value="00:00">12:00 ص</option>
+                            <option value="00:30">12:30 ص</option>
+                            <option value="01:00">1:00 ص</option>
+                            <option value="01:30">1:30 ص</option>
+                            <option value="02:00">2:00 ص</option>
+                            <option value="02:30">2:30 ص</option>
+                            <option value="03:00">3:00 ص</option>
+                            <option value="03:30">3:30 ص</option>
+                            <option value="04:00">4:00 ص</option>
+                            <option value="04:30">4:30 ص</option>
+                            <option value="05:00">5:00 ص</option>
+                            <option value="05:30">5:30 ص</option>
+                            <option value="06:00">6:00 ص</option>
+                            <option value="06:30">6:30 ص</option>
+                            <option value="07:00">7:00 ص</option>
+                            <option value="07:30">7:30 ص</option>
+                            <option value="08:00">8:00 ص</option>
+                            <option value="08:30">8:30 ص</option>
+                            <option value="09:00">9:00 ص</option>
+                            <option value="09:30">9:30 ص</option>
+                            <option value="10:00">10:00 ص</option>
+                            <option value="10:30">10:30 ص</option>
+                            <option value="11:00">11:00 ص</option>
+                            <option value="11:30">11:30 ص</option>
+                            <option value="12:00">12:00 م</option>
+                            <option value="12:30">12:30 م</option>
+                            <option value="13:00">1:00 م</option>
+                            <option value="13:30">1:30 م</option>
+                            <option value="14:00">2:00 م</option>
+                            <option value="14:30">2:30 م</option>
+                            <option value="15:00">3:00 م</option>
+                            <option value="15:30">3:30 م</option>
+                            <option value="16:00">4:00 م</option>
+                            <option value="16:30">4:30 م</option>
+                            <option value="17:00">5:00 م</option>
+                            <option value="17:30">5:30 م</option>
+                            <option value="18:00">6:00 م</option>
+                            <option value="18:30">6:30 م</option>
+                            <option value="19:00">7:00 م</option>
+                            <option value="19:30">7:30 م</option>
+                            <option value="20:00">8:00 م</option>
+                            <option value="20:30">8:30 م</option>
+                            <option value="21:00">9:00 م</option>
+                            <option value="21:30">9:30 م</option>
+                            <option value="22:00">10:00 م</option>
+                            <option value="22:30">10:30 م</option>
+                            <option value="23:00">11:00 م</option>
+                            <option value="23:30">11:30 م</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="repeatTimeSection" style="display: none;">
+                    <div class="form-group">
+                        <label for="firstTime">الوقت الأول *</label>
+                        <select id="firstTime" style="cursor: pointer;">
+                            <option value="">اختر الوقت</option>
+                            <option value="00:00">12:00 ص</option>
+                            <option value="00:30">12:30 ص</option>
+                            <option value="01:00">1:00 ص</option>
+                            <option value="01:30">1:30 ص</option>
+                            <option value="02:00">2:00 ص</option>
+                            <option value="02:30">2:30 ص</option>
+                            <option value="03:00">3:00 ص</option>
+                            <option value="03:30">3:30 ص</option>
+                            <option value="04:00">4:00 ص</option>
+                            <option value="04:30">4:30 ص</option>
+                            <option value="05:00">5:00 ص</option>
+                            <option value="05:30">5:30 ص</option>
+                            <option value="06:00">6:00 ص</option>
+                            <option value="06:30">6:30 ص</option>
+                            <option value="07:00">7:00 ص</option>
+                            <option value="07:30">7:30 ص</option>
+                            <option value="08:00">8:00 ص</option>
+                            <option value="08:30">8:30 ص</option>
+                            <option value="09:00">9:00 ص</option>
+                            <option value="09:30">9:30 ص</option>
+                            <option value="10:00">10:00 ص</option>
+                            <option value="10:30">10:30 ص</option>
+                            <option value="11:00">11:00 ص</option>
+                            <option value="11:30">11:30 ص</option>
+                            <option value="12:00">12:00 م</option>
+                            <option value="12:30">12:30 م</option>
+                            <option value="13:00">1:00 م</option>
+                            <option value="13:30">1:30 م</option>
+                            <option value="14:00">2:00 م</option>
+                            <option value="14:30">2:30 م</option>
+                            <option value="15:00">3:00 م</option>
+                            <option value="15:30">3:30 م</option>
+                            <option value="16:00">4:00 م</option>
+                            <option value="16:30">4:30 م</option>
+                            <option value="17:00">5:00 م</option>
+                            <option value="17:30">5:30 م</option>
+                            <option value="18:00">6:00 م</option>
+                            <option value="18:30">6:30 م</option>
+                            <option value="19:00">7:00 م</option>
+                            <option value="19:30">7:30 م</option>
+                            <option value="20:00">8:00 م</option>
+                            <option value="20:30">8:30 م</option>
+                            <option value="21:00">9:00 م</option>
+                            <option value="21:30">9:30 م</option>
+                            <option value="22:00">10:00 م</option>
+                            <option value="22:30">10:30 م</option>
+                            <option value="23:00">11:00 م</option>
+                            <option value="23:30">11:30 م</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="hoursInterval">تكرار كل (ساعة) *</label>
+                        <input type="number" id="hoursInterval" min="1" max="24" placeholder="مثال: 8">
+                        <small style="color: var(--color-text-light); font-size: 0.85rem; display: block; margin-top: 5px;">سيتم حساب عدد الجرعات تلقائياً (24 ساعة ÷ عدد الساعات)</small>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="medicinePurpose">الغرض من الدواء</label>
-                    <input type="text" id="medicinePurpose" placeholder="مثال: مسكن للألم">
+                    <label for="durationMode">المدة *</label>
+                    <select id="durationMode" onchange="toggleDurationMode()" style="cursor: pointer;">
+                        <option value="days">عدد أيام محدد</option>
+                        <option value="forever">يومياً</option>
+                    </select>
+                </div>
+                <div class="form-group" id="durationDaysSection">
+                    <label for="medicineDuration">عدد الأيام *</label>
+                    <input type="number" id="medicineDuration" required min="1" placeholder="مثال: 7">
                 </div>
                 <div class="form-group">
-                    <label for="startDate">تاريخ البداية *</label>
-                    <input type="date" id="startDate" required>
+                    <label for="medicinePurpose">الغرض من الدواء (اختياري)</label>
+                    <textarea id="medicinePurpose" rows="3" placeholder="مثال: لتخفيف الصداع"></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="duration">المدة (بالأيام) *</label>
-                    <input type="number" id="duration" required min="1" placeholder="مثال: 7">
+                    <label for="medicineStartDate">تاريخ البدء *</label>
+                    <input type="date" id="medicineStartDate" required>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">حفظ الدواء</button>
             </form>
@@ -895,7 +1021,7 @@
         };
 
         window.openAddMedicineModal = function() {
-            document.getElementById('startDate').valueAsDate = new Date();
+            document.getElementById('medicineStartDate').valueAsDate = new Date();
             document.getElementById('addMedicineModal').classList.add('active');
             document.body.style.overflow = 'hidden';
         };
@@ -903,29 +1029,128 @@
         window.closeAddMedicineModal = function() {
             document.getElementById('addMedicineModal').classList.remove('active');
             document.getElementById('addMedicineForm').reset();
+            // Reset visibility
+            document.getElementById('singleTimeSection').style.display = 'block';
+            document.getElementById('repeatTimeSection').style.display = 'none';
+            document.getElementById('durationDaysSection').style.display = 'block';
+            document.getElementById('repeatEveryHours').checked = false;
             document.body.style.overflow = 'auto';
+        };
+
+        window.toggleRepeatMode = function() {
+            const checkbox = document.getElementById('repeatEveryHours');
+            const singleSection = document.getElementById('singleTimeSection');
+            const repeatSection = document.getElementById('repeatTimeSection');
+            
+            if (checkbox.checked) {
+                singleSection.style.display = 'none';
+                repeatSection.style.display = 'block';
+                document.getElementById('medicineTime').removeAttribute('required');
+                document.getElementById('firstTime').setAttribute('required', 'required');
+                document.getElementById('hoursInterval').setAttribute('required', 'required');
+            } else {
+                singleSection.style.display = 'block';
+                repeatSection.style.display = 'none';
+                document.getElementById('medicineTime').setAttribute('required', 'required');
+                document.getElementById('firstTime').removeAttribute('required');
+                document.getElementById('hoursInterval').removeAttribute('required');
+            }
+        };
+
+        window.toggleDurationMode = function() {
+            const mode = document.getElementById('durationMode').value;
+            const daysSection = document.getElementById('durationDaysSection');
+            const durationInput = document.getElementById('medicineDuration');
+            
+            if (mode === 'forever') {
+                daysSection.style.display = 'none';
+                durationInput.removeAttribute('required');
+                durationInput.value = '';
+            } else {
+                daysSection.style.display = 'block';
+                durationInput.setAttribute('required', 'required');
+            }
         };
 
         document.getElementById('addMedicineForm').onsubmit = async function(e) {
             e.preventDefault();
 
             const name = document.getElementById('medicineName').value;
-            const time = document.getElementById('medicineTime').value;
+            const durationMode = document.getElementById('durationMode').value;
+            const duration = durationMode === 'forever' ? 36500 : parseInt(document.getElementById('medicineDuration').value);
             const purpose = document.getElementById('medicinePurpose').value;
-            const startDate = document.getElementById('startDate').value;
-            const duration = parseInt(document.getElementById('duration').value);
+            const startDate = new Date(document.getElementById('medicineStartDate').value);
+            const repeatMode = document.getElementById('repeatEveryHours').checked;
 
-            const medicineRef = push(ref(database, 'medicines'));
-            await set(medicineRef, {
-                id: medicineRef.key,
-                name: name,
-                time: time,
-                purpose: purpose,
-                startDate: startDate,
-                duration: duration
-            });
+            try {
+                if (repeatMode) {
+                    // Repeat mode - create multiple medicines
+                    const firstTime = document.getElementById('firstTime').value;
+                    const hoursInterval = parseInt(document.getElementById('hoursInterval').value);
 
-            closeAddMedicineModal();
+                    if (!firstTime || !hoursInterval) {
+                        alert('الرجاء ملء جميع حقول التكرار');
+                        return;
+                    }
+
+                    // Calculate times per day automatically
+                    const timesPerDay = Math.floor(24 / hoursInterval);
+
+                    // Parse first time
+                    const [hours, minutes] = firstTime.split(':').map(Number);
+                    
+                    // Create medicine entries for each time
+                    for (let i = 0; i < timesPerDay; i++) {
+                        const medicineId = `${Date.now()}_${i}`;
+                        const totalHours = hours + (i * hoursInterval);
+                        const newHours = totalHours % 24;
+                        const timeStr = `${String(newHours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+
+                        const medicineData = {
+                            id: medicineId,
+                            name: `${name} (${i + 1})`,
+                            time: timeStr,
+                            duration: duration,
+                            isForever: durationMode === 'forever',
+                            purpose: purpose,
+                            startDate: formatDate(startDate),
+                            createdAt: new Date().toISOString(),
+                            groupId: Date.now().toString()
+                        };
+
+                        await set(ref(database, 'medicines/' + medicineId), medicineData);
+                        await new Promise(resolve => setTimeout(resolve, 10));
+                    }
+                } else {
+                    // Single time mode
+                    const time = document.getElementById('medicineTime').value;
+                    if (!time) {
+                        alert('الرجاء اختيار الوقت');
+                        return;
+                    }
+
+                    const medicineId = Date.now().toString();
+                    const medicineData = {
+                        id: medicineId,
+                        name: name,
+                        time: time,
+                        duration: duration,
+                        isForever: durationMode === 'forever',
+                        purpose: purpose,
+                        startDate: formatDate(startDate),
+                        createdAt: new Date().toISOString()
+                    };
+
+                    await set(ref(database, 'medicines/' + medicineId), medicineData);
+                }
+
+                closeAddMedicineModal();
+                loadMedicinesForDate(currentDate);
+                generateCalendar();
+            } catch (error) {
+                console.error('Error adding medicine:', error);
+                alert('حدث خطأ أثناء إضافة الدواء');
+            }
         };
 
         window.deleteMedicine = async function(medicineId) {
